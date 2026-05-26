@@ -18,7 +18,7 @@
 
 export const DATA_SOURCE_CONFIG = {
   // ⭐ CHANGE THIS URL TO YOUR GITHUB RAW URL ⭐
-  GITHUB_RAW_URL: 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/audiobooks.json',
+  GITHUB_RAW_URL: 'https://raw.githubusercontent.com/StoryStream1/audiobook-data/main/audiobooks.json',
   
   // Cache duration in milliseconds (default: 5 minutes)
   // Lower = fresher data, Higher = less network requests

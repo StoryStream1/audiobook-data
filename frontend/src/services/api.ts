@@ -74,13 +74,9 @@ export const audiobookAPI = {
     }
 
     try {
-      // Fetch from GitHub with cache-busting
-      const response = await fetch(`${url}?t=${Date.now()}`, {
-        method: 'GET',
-        headers: {
-          'Cache-Control': 'no-cache',
-        },
-      });
+      // Fetch from GitHub with cache-busting query param
+      // No custom headers to avoid CORS preflight requests
+      const response = await fetch(`${url}?t=${Date.now()}`);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
