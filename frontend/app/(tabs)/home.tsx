@@ -41,6 +41,8 @@ export default function HomeScreen() {
       <FlatList
         data={filteredAudiobooks}
         keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
         renderItem={({ item }) => (
           <AudiobookCard
             audiobook={item}
@@ -82,7 +84,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#999',
   },
+  row: {
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+  },
   listContent: {
+    paddingTop: 8,
     paddingBottom: 16,
   },
   emptyContainer: {

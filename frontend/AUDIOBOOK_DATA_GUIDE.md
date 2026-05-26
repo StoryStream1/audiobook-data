@@ -6,11 +6,11 @@ All audiobook data is stored in a single file for easy editing:
 
 **File Location:** `/app/frontend/src/data/audiobooks.ts`
 
-## Quick Start: Replacing Placeholder Links
+## Quick Start: Replacing Placeholder Data
 
 1. Open the file: `/app/frontend/src/data/audiobooks.ts`
 2. Find the audiobook you want to update
-3. Replace the `teraboxLink` value with your actual TeraBox link
+3. Replace the `teraboxLink` and `coverImage` values
 
 ### Example:
 
@@ -22,7 +22,8 @@ All audiobook data is stored in a single file for easy editing:
   author: 'Napoleon Hill',
   category: 'Motivation',
   description: 'A timeless classic on success principles...',
-  teraboxLink: 'https://terabox.com/s/1abc123example'  // ← Placeholder
+  teraboxLink: 'https://terabox.com/s/1abc123example',  // ← Placeholder
+  coverImage: 'https://via.placeholder.com/300x450/...'  // ← Placeholder
 }
 ```
 
@@ -34,7 +35,8 @@ All audiobook data is stored in a single file for easy editing:
   author: 'Napoleon Hill',
   category: 'Motivation',
   description: 'A timeless classic on success principles...',
-  teraboxLink: 'https://terabox.com/s/1a2b3c4d5e6f7g'  // ← Your real link
+  teraboxLink: 'https://terabox.com/s/1a2b3c4d5e6f7g',  // ← Your real link
+  coverImage: 'https://yourdomain.com/covers/think-grow-rich.jpg'  // ← Your real image
 }
 ```
 
@@ -43,6 +45,35 @@ All audiobook data is stored in a single file for easy editing:
 The app supports both TeraBox link formats:
 - Short format: `https://terabox.com/s/xxxxx`
 - Long format: `https://www.terabox.com/sharing/link?surl=xxxxx`
+
+## Cover Image Options
+
+You have several options for audiobook cover images:
+
+### Option 1: Image URL (Recommended)
+Use a direct URL to an image hosted online:
+```typescript
+coverImage: 'https://yourdomain.com/covers/book-cover.jpg'
+```
+
+### Option 2: Base64 Encoded Image
+Convert your image to base64 and embed it directly:
+```typescript
+coverImage: 'data:image/jpeg;base64,/9j/4AAQSkZJRg...'
+```
+
+**To convert an image to base64:**
+1. Use online tools like: base64-image.de or base64.guru
+2. Copy the full base64 string including the `data:image/...` prefix
+3. Paste it as the coverImage value
+
+### Option 3: Keep Placeholder Images
+The current placeholder images use via.placeholder.com and will work until you replace them.
+
+**Image Specifications:**
+- Recommended size: 300x450 pixels (2:3 aspect ratio)
+- Supported formats: JPG, PNG, WebP
+- File size: Keep under 200KB for fast loading
 
 ## Adding New Audiobooks
 

@@ -36,6 +36,8 @@ export default function FavoritesScreen() {
       <FlatList
         data={favoriteAudiobooks}
         keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={favoriteAudiobooks.length > 0 ? styles.row : undefined}
         renderItem={({ item }) => (
           <AudiobookCard
             audiobook={item}
@@ -78,7 +80,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#999',
   },
+  row: {
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+  },
   listContent: {
+    paddingTop: 8,
     paddingBottom: 16,
     flexGrow: 1,
   },

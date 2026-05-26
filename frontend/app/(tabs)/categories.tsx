@@ -64,6 +64,8 @@ export default function CategoriesScreen() {
       <FlatList
         data={filteredAudiobooks}
         keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
         renderItem={({ item }) => (
           <AudiobookCard
             audiobook={item}
@@ -125,7 +127,12 @@ const styles = StyleSheet.create({
   categoryChipTextActive: {
     color: '#fff',
   },
+  row: {
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+  },
   listContent: {
+    paddingTop: 8,
     paddingBottom: 16,
   },
 });
