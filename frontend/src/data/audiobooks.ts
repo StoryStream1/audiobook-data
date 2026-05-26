@@ -7,10 +7,17 @@ export interface Audiobook {
   id: string;
   title: string;
   author: string;
-  category: 'Motivation' | 'Business' | 'Islamic' | 'Stories' | 'Self Improvement';
+  category: string;
   description: string;
-  teraboxLink: string;
-  coverImage: string; // URL or base64 image string
+  coverImage: string;
+  teraboxLink?: string;
+  totalEpisodes?: number;
+  status?: string;
+  parts?: {
+    title: string;
+    episodeRange: string;
+    link: string;
+  }[];
 }
 
 export const CATEGORIES = [

@@ -1,12 +1,28 @@
 [
   {
-    "id": "1",
-    "title": "Think and Grow Rich",
-    "author": "Napoleon Hill",
-    "category": "Motivation",
-    "description": "A timeless classic on success principles and the power of desire, faith, and persistence in achieving wealth.",
-    "teraboxLink": "https://terabox.com/s/1abc123example",
-    "coverImage": "https://via.placeholder.com/300x450/ff6b6b/ffffff?text=Think+and+Grow+Rich"
+      "id": "1",
+        "title": "My Vampire System",
+          "author": "JKSManga",
+            "category": "Stories",
+              "description": "The human race is at war with the vicious Dalki. Quinn discovers a mysterious system that changes his life.",
+                "coverImage": "https://raw.githubusercontent.com/StoryStream1/audiobook-data/main/book-covers/my-vampire-system.jpg",
+                  "totalEpisodes": 2551,
+                    "status": "Completed",
+                      "parts": [
+                          {
+                                "title": "Episodes 1-100",
+                                      "episodeRange": "1-100",
+                                            "link": "https://1024terabox.com/s/1xHYyMk5meKcwx9T2_Hm6bQ"
+                                                },
+                                                    {
+                                                          "title": "Episodes 101-200",
+                                                                "episodeRange": "101-200",
+                                                                      "link": "https://terabox.com/s/YOUR_LINK_2"
+                                                                          }
+                                                                            ]
+                                                                            
+  
+    
   },
   {
     "id": "2",

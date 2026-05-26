@@ -30,17 +30,25 @@ export default function AudiobookDetailsScreen() {
     }
   };
 
-  const handleOpenLink = async () => {
-    if (!audiobook) return;
+  const openLink = async (url: string) => {
     try {
-      const canOpen = await Linking.canOpenURL(audiobook.teraboxLink);
+      const canOpen = await Linking.canOpenURL(url);
+
       if (canOpen) {
-        await Linking.openURL(audiobook.teraboxLink);
+        await Linking.openURL(url);
       } else {
-        Alert.alert('Error', 'Unable to open TeraBox link');
+        Alert.alert('Error', 'Unable to open link');
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to open link');
+    }
+  };
+
+  const handleOpenLink = async () => {
+    if (!audiobook) return;
+
+    if (audiobook.teraboxLink) {
+      await openLink(audiobook.teraboxLink);
     }
   };
 
@@ -119,12 +127,27 @@ export default function AudiobookDetailsScreen() {
             <Text style={styles.descriptionLabel}>About this audiobook</Text>
             <Text style={styles.description}>{audiobook.description}</Text>
           </View>
+          {/* Episode Parts or Open TeraBox Button */}
+          {Array.isArray((audiobook as any).parts) && (audiobook as any).parts.length > 0 ? (
+            <View style={{ marginTop: 16 }}>
+              {(audiobook as any).parts.map((part: any, index: number) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.openButton}
+                  onPress={() => openLink(part.link)}
+                >
+                  <Text style={styles.openButtonText}>
+                    {part.title || `Episodes ${part.episodeRange || index + 1}`}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.openButton} onPress={handleOpenLink}>
+              <Text style={styles.openButtonText}>Open in TeraBox</Text>
+            </TouchableOpacity>
+          )}
 
-          {/* Open TeraBox Button */}
-          <TouchableOpacity style={styles.openButton} onPress={handleOpenLink}>
-            <Ionicons name="open-outline" size={24} color="#fff" />
-            <Text style={styles.openButtonText}>Open in TeraBox</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
