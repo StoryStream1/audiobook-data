@@ -1,23 +1,32 @@
-import React, { useMemo } from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { View, FlatList, StyleSheet, Text, RefreshControl, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AudiobookCard from '@/src/components/AudiobookCard';
 import AdBanner from '@/src/components/AdBanner';
-import { AUDIOBOOKS } from '@/src/data/audiobooks';
+import { useAudiobooks } from '@/src/hooks/useAudiobooks';
 import { useFavorites } from '@/src/hooks/useFavorites';
 
 export default function FavoritesScreen() {
+  const { audiobooks, loading: audiobooksLoading, refresh } = useAudiobooks();
   const { favorites, isFavorite, toggleFavorite, loading } = useFavorites();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refresh();
+    setRefreshing(false);
+  };
 
   const favoriteAudiobooks = useMemo(() => {
-    return AUDIOBOOKS.filter((book) => favorites.includes(book.id));
-  }, [favorites]);
+    return audiobooks.filter((book) => favorites.includes(book.id));
+  }, [favorites, audiobooks]);
 
-  if (loading) {
+  if ((loading || audiobooksLoading) && !refreshing) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4a90e2" />
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       </SafeAreaView>
@@ -46,6 +55,14 @@ export default function FavoritesScreen() {
           />
         )}
         contentContainerStyle={styles.listContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#4a90e2"
+            colors={['#4a90e2']}
+          />
+        }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="heart-outline" size={64} color="#333" />
@@ -95,6 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loadingText: {
+    marginTop: 12,
     fontSize: 16,
     color: '#999',
   },

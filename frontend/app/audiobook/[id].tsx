@@ -1,33 +1,37 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { AUDIOBOOKS } from '@/src/data/audiobooks';
+import { audiobookAPI, Audiobook } from '@/src/services/api';
 import { useFavorites } from '@/src/hooks/useFavorites';
 
 export default function AudiobookDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { isFavorite, toggleFavorite } = useFavorites();
-  
-  const audiobook = AUDIOBOOKS.find((book) => book.id === id);
+  const [audiobook, setAudiobook] = useState<Audiobook | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!audiobook) {
-    return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Audiobook not found</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  useEffect(() => {
+    loadAudiobook();
+  }, [id]);
+
+  const loadAudiobook = async () => {
+    try {
+      setLoading(true);
+      const data = await audiobookAPI.getById(id!);
+      setAudiobook(data);
+    } catch (err) {
+      setError('Failed to load audiobook details');
+      console.error('Error loading audiobook:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleOpenLink = async () => {
+    if (!audiobook) return;
     try {
       const canOpen = await Linking.canOpenURL(audiobook.teraboxLink);
       if (canOpen) {
@@ -39,6 +43,37 @@ export default function AudiobookDetailsScreen() {
       Alert.alert('Error', 'Failed to open link');
     }
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4a90e2" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error || !audiobook) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error || 'Audiobook not found'}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const favorite = isFavorite(audiobook.id);
 
@@ -188,6 +223,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#999',
   },
   errorContainer: {
     flex: 1,

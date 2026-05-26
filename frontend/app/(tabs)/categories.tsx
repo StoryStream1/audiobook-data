@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, FlatList, StyleSheet, Text, TouchableOpacity, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AudiobookCard from '@/src/components/AudiobookCard';
 import AdBanner from '@/src/components/AdBanner';
-import { AUDIOBOOKS, CATEGORIES, Audiobook } from '@/src/data/audiobooks';
+import { useAudiobooks } from '@/src/hooks/useAudiobooks';
 import { useFavorites } from '@/src/hooks/useFavorites';
+
+const CATEGORIES = ['Motivation', 'Business', 'Islamic', 'Stories', 'Self Improvement'];
 
 export default function CategoriesScreen() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { audiobooks, loading, error, refresh } = useAudiobooks();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refresh();
+    setRefreshing(false);
+  };
 
   const filteredAudiobooks = selectedCategory
-    ? AUDIOBOOKS.filter((book) => book.category === selectedCategory)
-    : AUDIOBOOKS;
+    ? audiobooks.filter((book) => book.category === selectedCategory)
+    : audiobooks;
 
   const getCategoryCount = (category: string) => {
-    return AUDIOBOOKS.filter((book) => book.category === category).length;
+    return audiobooks.filter((book) => book.category === category).length;
   };
+
+  if (loading && !refreshing) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4a90e2" />
+          <Text style={styles.loadingText}>Loading audiobooks...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -37,7 +58,7 @@ export default function CategoriesScreen() {
           onPress={() => setSelectedCategory(null)}
         >
           <Text style={[styles.categoryChipText, !selectedCategory && styles.categoryChipTextActive]}>
-            All ({AUDIOBOOKS.length})
+            All ({audiobooks.length})
           </Text>
         </TouchableOpacity>
         {CATEGORIES.map((category) => (
@@ -74,6 +95,14 @@ export default function CategoriesScreen() {
           />
         )}
         contentContainerStyle={styles.listContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#4a90e2"
+            colors={['#4a90e2']}
+          />
+        }
       />
 
       <AdBanner />
@@ -134,5 +163,15 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 8,
     paddingBottom: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#999',
   },
 });
