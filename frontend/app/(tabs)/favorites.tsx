@@ -1,0 +1,113 @@
+import React, { useMemo } from 'react';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import AudiobookCard from '@/src/components/AudiobookCard';
+import AdBanner from '@/src/components/AdBanner';
+import { AUDIOBOOKS } from '@/src/data/audiobooks';
+import { useFavorites } from '@/src/hooks/useFavorites';
+
+export default function FavoritesScreen() {
+  const { favorites, isFavorite, toggleFavorite, loading } = useFavorites();
+
+  const favoriteAudiobooks = useMemo(() => {
+    return AUDIOBOOKS.filter((book) => favorites.includes(book.id));
+  }, [favorites]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Favorites</Text>
+        <Text style={styles.headerSubtitle}>
+          {favoriteAudiobooks.length} {favoriteAudiobooks.length === 1 ? 'audiobook' : 'audiobooks'} saved
+        </Text>
+      </View>
+
+      <FlatList
+        data={favoriteAudiobooks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <AudiobookCard
+            audiobook={item}
+            isFavorite={isFavorite(item.id)}
+            onToggleFavorite={toggleFavorite}
+          />
+        )}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Ionicons name="heart-outline" size={64} color="#333" />
+            <Text style={styles.emptyText}>No favorites yet</Text>
+            <Text style={styles.emptySubtext}>Tap the heart icon on audiobooks to save them here</Text>
+          </View>
+        }
+      />
+
+      <AdBanner />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0a0a0a',
+  },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#999',
+  },
+  listContent: {
+    paddingBottom: 16,
+    flexGrow: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#999',
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 80,
+    paddingHorizontal: 32,
+  },
+  emptyText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#666',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+  },
+});
