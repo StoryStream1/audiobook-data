@@ -1,25 +1,26 @@
-[
-  {
-      "id": "1",
-        "title": "My Vampire System",
-          "author": "JKSManga",
-            "category": "Stories",
-              "description": "The human race is at war with the vicious Dalki. Quinn discovers a mysterious system that changes his life.",
-                "coverImage": "https://raw.githubusercontent.com/StoryStream1/audiobook-data/main/book-covers/my-vampire-system.jpg",
-                  "totalEpisodes": 2551,
-                    "status": "Completed",
-                      "parts": [
-                          {
-                                "title": "Episodes 1-100",
-                                      "episodeRange": "1-100",
-                                            "link": "https://1024terabox.com/s/1xHYyMk5meKcwx9T2_Hm6bQ"
-                                                },
-                                                    {
-                                                          "title": "Episodes 101-200",
-                                                                "episodeRange": "101-200",
-                                                                      "link": "https://terabox.com/s/YOUR_LINK_2"
-                                                                          }
-                                                                            ]
+{
+  "id": "1",
+  "title": "My Vampire System",
+  "author": "JKSManga",
+  "category": "Novel · Fantasy",
+  "description": "The human race is at war with the vicious Dalki. When humanity needs help more than ever, Quinn discovers a mysterious system that changes his life forever. With new powers, dangerous enemies, and secrets around every corner, he must grow stronger to survive.",
+  "coverImage": "https://raw.githubusercontent.com/StoryStream1/audiobook-data/conflict_260526_1108/frontend/assets/images/my-vampire-system.jpg",
+  "totalEpisodes": 2551,
+  "status": "Completed",
+  "tags": ["Action", "System", "Fantasy", "Vampire", "Weak to Strong"],
+  "parts": [
+    {
+      "title": "Episodes 1-100",
+      "episodeRange": "1-100",
+      "link": "https://1024terabox.com/s/1gpdknPUhcnLq6I3Q_DAPVA"
+    },
+    {
+      "title": "Episodes 101-200",
+      "episodeRange": "101-200",
+      "link": "https://1024terabox.com/s/1gpdknPUhcnLq6I3Q_DAPVA"
+    }
+  ]
+
                                                                             
   
     
